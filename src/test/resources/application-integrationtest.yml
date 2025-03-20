@@ -1,0 +1,26 @@
+DB: test
+DB_HOST: mem
+DB_PORT: 5432
+DB_USER: test
+DB_PASSWORD: test
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+    hikari:
+      jdbc-url: ${spring.datasource.url}
+      username: test
+      password: test
+      driver-class-name: org.h2.Driver
+      maximum-pool-size: 80
+      minimum-idle: 10
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+  test:
+    database:
+      replace: none

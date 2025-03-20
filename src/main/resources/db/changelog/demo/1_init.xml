@@ -1,0 +1,114 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1_init_create_user_table" author="akuzmichev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users" remarks="пользователи">
+            <column name="id" remarks="Уникальный идентификатор" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_user"/>
+            </column>
+            <column name="email" remarks="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="full_name" remarks="ФИО" type="VARCHAR(255)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" remarks="логин" type="VARCHAR(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" remarks="хэш пароля" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" remarks="роль" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1_init_create_auth_token_table" author="akuzmichev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="auth_tokens"/>
+            </not>
+        </preConditions>
+        <createTable tableName="auth_tokens" remarks="токен авторизации">
+            <column name="id" remarks="Уникальный идентификатор" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_token"/>
+            </column>
+            <column name="token" remarks="токен" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" remarks="связь с пользователем" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_user_token" references="users(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1_init_create_meter_device_table" author="akuzmichev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="meter_devices"/>
+            </not>
+        </preConditions>
+        <createTable tableName="meter_devices"  remarks="прибор учета">
+            <column name="id" remarks="Уникальный идентификатор" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_meter_device"/>
+            </column>
+            <column name="serial_number" remarks="серийный номер" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="inventory_number" remarks="инвентарный номер" type="VARCHAR(255)"/>
+            <column name="manufacture_year" remarks="год изготовления" type="SMALLINT"/>
+            <column name="transformation_coefficient" remarks="коэффициент трансформации" type="INT"/>
+            <column name="installation_date" remarks="дата установки" type="DATE"/>
+            <column name="seal_number" remarks="номер пломбы" type="VARCHAR(15)" />
+            <column name="anti_magnetic_seal_number" remarks="номер антимагнитной пломбы" type="VARCHAR(15)" />
+            <column name="installation_place" remarks="место установки" type="VARCHAR(255)"/>
+            <column name="note" remarks="примечание" type="VARCHAR(255)"/>
+            <column name="gis_housing_id" remarks="ID в ГИС ЖКХ" type="UUID">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="user_id" remarks="связка с пользователем" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_device_user" references="users(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1_init_create_zone_value_table" author="akuzmichev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="zone_values"/>
+            </not>
+        </preConditions>
+        <createTable tableName="zone_values">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_meter_zone_values"/>
+            </column>
+            <column name="values_per_zone" remarks="значения для зон" type="JSON"/>
+            <column name="device_id" remarks="связка с прибором учета" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_device_zone_value" references="meter_devices(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1_add_test_admin_user" author="akuzmichev">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="users"/>
+        </preConditions>
+        <insert tableName="users">
+            <column name="username" remarks="логин" value="admin" />
+            <column name="password" remarks="пароль: admin" value="$2a$10$aVvpXScXnEtV02io0yKj2uZArk6wRBEQmlLFpUlSQsHmAN1GQdOE." />
+            <column name="full_name" value="тестовый пользователь" />
+            <column name="email" value="email@email.com"/>
+            <column name="role" value="ADMIN" />
+        </insert>
+    </changeSet>    
+    
+</databaseChangeLog>
+

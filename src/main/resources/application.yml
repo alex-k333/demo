@@ -1,0 +1,39 @@
+db:
+  database: ${DB}
+  host: ${DB_HOST}
+  port: ${DB_PORT}
+  username: ${DB_USER}
+  password: ${DB_PASSWORD}
+
+spring:
+  security:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      jakarta:
+        persistence:
+          validation:
+            mode: none
+  datasource:
+    url: jdbc:postgresql://${db.host}:${db.port}/${db.database}
+    hikari:
+      jdbc-url: ${spring.datasource.url}
+      username: ${db.username}
+      password: ${db.password}
+      driver-class-name: org.postgresql.Driver
+      maximum-pool-size: 80
+      minimum-idle: 10
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: public
+
+springdoc:
+  swagger-ui:
+    doc-expansion: none
+    default-models-expand-depth: -1
+
+jwt:
+  secret: 3ea1a6e09fca79b5426bc0eb7fd623535b77fa392527fcdbc2255e290ce28d06e08fc6403700e29dd51b3999a48fa5d96332ef48627a530f649c55af88070582ead0d6f355281dcb92cbe0ddce3fd15dd5f386af2f30020af7d4bda2eb41efc241847eb63d9fa09fb00ceaeba7c714f46d3cfdbca1591cd7430b0d8741a120c11204a5641416c1bfc9afb60496942f33a7e2f60544374b2fdb6f3acbd5a695440c0a03d3d925cf5363c7ca470499bc5e9fbe09750dec35d4784a507e25a7f3dcc719e311912a2aa75a3578651520233eae93dece2baf88daf25b801daab76530ffd00e501adfd2f3a21e92504a0b8499de2fa11af513bdcc1158a8c57310c14f
