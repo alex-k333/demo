@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @Getter
-@Tag(name = "Аунтификация", description = "методы аунтификации")
+@Tag(name = "Безопасность", description = "методы аутентификации")
 public class AuthController {
 
     private final SecurityService service;
