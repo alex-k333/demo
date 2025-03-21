@@ -15,7 +15,7 @@ import java.util.UUID;
 public class MeterDeviceDto {
 
     @Schema(description = "Серийный номер", example = "123456")
-    @NotNull(message = "Серийный номер обязателен для заполнения")
+    @NotBlank(message = "Серийный номер обязателен для заполнения")
     private String serialNumber;
 
     @Schema(description = "Инвертарный номер", example = "АБВ-123")
