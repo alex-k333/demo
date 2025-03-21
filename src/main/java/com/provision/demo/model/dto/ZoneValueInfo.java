@@ -11,6 +11,9 @@ import lombok.Setter;
 @Schema(description = "Значеня счетчика по зонам")
 public class ZoneValueInfo {
 
+    @Schema(description = "Идентификатор значения", example = "1")
+    private Long id;
+
     @Schema(description = "Значения по зонам", example = """
             { "a" : 123, "b" : 456}
             """)

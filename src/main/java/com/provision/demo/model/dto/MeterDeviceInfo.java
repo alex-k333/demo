@@ -12,6 +12,9 @@ import java.util.UUID;
 @Setter
 public class MeterDeviceInfo {
 
+    @Schema(description = "Идентификатор проибора учёта")
+    private Long id;
+
     @Schema(description = "Серийный номер", example = "123456")
     private String serialNumber;
 

@@ -15,7 +15,7 @@ public class DemoErrorHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception exception) {
-        log.error("Exception caught: {}", exception.getMessage(), exception);
+        log.error("Exception: {}", exception.getMessage(), exception);
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage()))
                 .build();
     }
